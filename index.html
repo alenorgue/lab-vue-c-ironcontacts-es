@@ -13,7 +13,42 @@
 
 <body>
   <div id="app">
+    <header>
+      <h1>Irom Contacts</h1>
+      <p>Manage your contacts with ease.</p>
+    </header>
 
+    <main>
+      <section id="contact-list">
+        <table style="width: 450px;">
+          <thead>
+            <tr>
+              <th>Picture</th>
+              <th>Name</th>
+              <th>Popularity</th>
+            </tr>
+          </thead>
+          <tbody v-for="contact in allContacts" id="contact-table-body">
+            <tr>
+              <td>
+                <img :src="contact.pictureUrl" alt="Contact Picture" style="width: 810px;" />
+              </td>
+              <td>{{ contact.name }}</td>
+              <td>{{ contact.popularity }}</td>
+            </tr>
+            
+          </tbody>
+      </section>
+
+      <section id="contact-form">
+        <!-- Contact form will be rendered here -->
+      </section>
+    </main>
+
+   
+  <footer>
+      <p>&copy; 2023 Irom Contacts. All rights reserved.</p>
+    </footer>
   </div>
   <script type="module" src="app.js"></script>
 </body>
