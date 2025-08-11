@@ -477,7 +477,51 @@ createApp({
         wonEmmy: false,
       },
     ]);
-
-    return { allContacts };
+    const sortType = ref('name'); // 'name' o 'popularity'
+    const sortedContacts = computed(() => {
+      return allContacts.value.slice().sort((a, b) => {
+        if (sortType.value === 'name') {
+          return a.name.localeCompare(b.name);
+        } else if (sortType.value === 'popularity') {
+          return b.popularity - a.popularity;
+        }
+        return 0;
+      });
+    });
+    const setSortType = (type) => {
+      sortType.value = type;
+    }
+  // Filtros
+  const nameFilter = ref("");
+  const minPopularity = ref(0);
+  const onlyOscar = ref(false);
+  const onlyEmmy = ref(false);
+    const filterContacts = (searchTerm) => {
+      return sortedContacts.value.filter((contact) => {
+        const matchesName = contact.name.toLowerCase().includes(nameFilter.value.toLowerCase());
+        const matchesPopularity = contact.popularity >= minPopularity.value;
+        const matchesOscar = !onlyOscar.value || contact.wonOscar;
+        const matchesEmmy = !onlyEmmy.value || contact.wonEmmy;
+        return matchesName && matchesPopularity && matchesOscar && matchesEmmy;
+      });
+    }
+    const deleteContact = (contact) => {
+      const index = allContacts.value.findIndex(c => c.id === contact.id);
+      if (index !== -1) {
+        allContacts.value.splice(index, 1);
+      }
+    };
+    return {
+      allContacts,
+      sortedContacts,
+      setSortType,
+      sortType,
+      filterContacts,
+      nameFilter,
+      minPopularity,
+      onlyOscar,
+      onlyEmmy, 
+      deleteContact,
+    };
   },
 }).mount("#app");

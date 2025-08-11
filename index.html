@@ -14,11 +14,33 @@
 <body>
   <div id="app">
     <header>
-      <h1>Irom Contacts</h1>
+      <h1>Iron Contacts</h1>
       <p>Manage your contacts with ease.</p>
     </header>
 
     <main>
+      <section id="contact-filter">
+        <div>
+          <label for="nameFilter">Filtrar por nombre:</label>
+          <input type="text" id="nameFilter" v-model="nameFilter" placeholder="Nombre..." />
+        </div>
+        <div>
+          <label for="minPopularity">Popularidad mínima:</label>
+          <input type="number" id="minPopularity" v-model="minPopularity" min="0" step="0.01" />
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" v-model="onlyOscar" /> Solo ganadores de Oscar
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" v-model="onlyEmmy" /> Solo ganadores de Emmy
+          </label>
+        </div>
+        <button @click="setSortType('name')">Sort by Name</button>
+        <button @click="setSortType('popularity')">Sort by Popularity</button>
+      </section>
       <section id="contact-list">
         <table style="width: 450px;">
           <thead>
@@ -26,17 +48,27 @@
               <th>Picture</th>
               <th>Name</th>
               <th>Popularity</th>
-            </tr>
+              <th>Oscar's Winner</th>
+              <th>Emmy's Winner</th>
+              <th>Actions </tr>
           </thead>
-          <tbody v-for="contact in allContacts" id="contact-table-body">
+          <tbody v-for="contact in filterContacts()" id="contact-table-body">
             <tr>
               <td>
                 <img :src="contact.pictureUrl" alt="Contact Picture" style="width: 810px;" />
               </td>
               <td>{{ contact.name }}</td>
               <td>{{ contact.popularity }}</td>
+              <td>
+                <span v-if="contact.wonOscar">🏆</span>
+              </td>
+              <td>
+                <span v-if="contact.wonEmmy">🏆</span>
+              </td>
+              <td>
+                <button @click="deleteContact(contact)">Delete</button>
             </tr>
-            
+
           </tbody>
       </section>
 
@@ -45,8 +77,8 @@
       </section>
     </main>
 
-   
-  <footer>
+
+    <footer>
       <p>&copy; 2023 Irom Contacts. All rights reserved.</p>
     </footer>
   </div>
